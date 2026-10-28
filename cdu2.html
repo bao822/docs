@@ -1,0 +1,361 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成都之旅 · 天府之国</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:"Microsoft Yahei",sans-serif;
+        }
+        body{
+            background-color:#f8f8f8;
+        }
+        /* 导航栏 */
+        nav{
+            width:100%;
+            height:60px;
+            background:#9b2226;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:0 40px;
+            position:sticky;
+            top:0;
+            z-index:99;
+        }
+        .logo{
+            color:#fff;
+            font-size:22px;
+            font-weight:bold;
+        }
+        .nav-menu a{
+            color:#fff;
+            text-decoration:none;
+            margin:0 15px;
+            font-size:16px;
+        }
+        .nav-menu a:hover{
+            color:#ffdd70;
+        }
+        /* Banner */
+        .banner{
+            width:100%;
+            height:420px;
+            background:linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)),url("https://img1.baidu.com/it/u=3870010224,3080121122&fm=253&fmt=auto&app=138&f=JPEG?w=1200&h=500") center/cover;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            color:#fff;
+        }
+        .banner h1{
+            font-size:48px;
+            margin-bottom:12px;
+        }
+        .banner p{
+            font-size:20px;
+            letter-spacing:2px;
+        }
+        /* 景点区域 */
+        .container{
+            width:1200px;
+            margin:40px auto;
+        }
+        .title{
+            text-align:center;
+            font-size:30px;
+            color:#6b4040;
+            margin-bottom:30px;
+            padding-bottom:10px;
+            border-bottom:2px solid #9b2226;
+            display:inline-block;
+            position:relative;
+            left:50%;
+            transform:translateX(-50%);
+        }
+        .spot-list{
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:25px;
+        }
+        .spot-card{
+            background:#fff;
+            border-radius:12px;
+            overflow:hidden;
+            box-shadow:0 4px 12px rgba(0,0,0,0.1);
+            cursor:pointer;
+            transition:all 0.3s;
+        }
+        .spot-card:hover{
+            transform:translateY(-8px);
+            box-shadow:0 8px 20px rgba(0,0,0,0.15);
+        }
+        .spot-card img{
+            width:100%;
+            height:220px;
+            object-fit:cover;
+        }
+        .spot-info{
+            padding:18px;
+        }
+        .spot-info h3{
+            font-size:20px;
+            color:#222;
+            margin-bottom:8px;
+        }
+        .spot-info p{
+            color:#666;
+            font-size:14px;
+            line-height:1.6;
+        }
+        /* ========== 弹窗样式【核心】 ========== */
+        .modal{
+            display:none;
+            position:fixed;
+            z-index:999;
+            left:0;
+            top:0;
+            width:100%;
+            height:100%;
+            background-color:rgba(0,0,0,0.6);
+            animation:fade 0.3s;
+        }
+        @keyframes fade{
+            from{opacity:0;}
+            to{opacity:1;}
+        }
+        .modal-content{
+            background:#fff;
+            width:600px;
+            margin:100px auto;
+            border-radius:14px;
+            overflow:hidden;
+            position:relative;
+            animation:slideDown 0.4s;
+        }
+        @keyframes slideDown{
+            from{transform:translateY(-40px);opacity:0;}
+            to{transform:translateY(0);opacity:1;}
+        }
+        .close-btn{
+            position:absolute;
+            right:18px;
+            top:14px;
+            font-size:28px;
+            font-weight:bold;
+            color:#ed4242;
+            cursor:pointer;
+            z-index:10;
+        }
+        .close-btn:hover{
+            color:#000;
+        }
+        .modal-img{
+            width:100%;
+            height:300px;
+            object-fit:cover;
+        }
+        .modal-text{
+            padding:24px;
+        }
+        .modal-text h2{
+            color:#9b2226;
+            margin-bottom:12px;
+        }
+        .modal-text p{
+            line-height:1.8;
+            color:#000000;
+        }
+        /* 底部 */
+        footer{
+            width:100%;
+            height:80px;
+            background:#d54949;
+            color:#fff;
+            text-align:center;
+            line-height:80px;
+            margin-top:50px;
+        }
+        /* 响应式适配 */
+        @media(max-width:1200px){
+            .container{
+                width:90%;
+            }
+            .spot-list{
+                grid-template-columns:repeat(2,1fr);
+            }
+        }
+        @media(max-width:768px){
+            .spot-list{
+                grid-template-columns:1fr;
+            }
+            .modal-content{
+                width:90%;
+            }
+            .banner h1{
+                font-size:32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航 -->
+    <nav>
+        <div class="logo">成都旅行</div>
+        <div class="nav-menu">
+            <a href="#home">首页</a>
+            <a href="#spot">景点推荐</a>
+            <a href="#food">美食</a>
+            <a href="#about">联系我们</a>
+        </div>
+    </nav>
+
+    <!-- Banner -->
+    <section class="banner" id="home">
+        <h1>天府成都 · 慢享时光</h1>
+        <p>一座来了就不想离开的城市</p>
+    </section>
+
+    <!-- 景点卡片区域 -->
+    <section class="container" id="spot">
+        <h2 class="title">精选景点</h2>
+        <div class="spot-list">
+            <!-- 卡片1 熊猫基地 -->
+            <div class="spot-card" onclick="openModal(0)">
+                <img src="3.jpg">
+                <div class="spot-info">
+                    <h3>大熊猫繁育研究基地</h3>
+                    <p>国宝大熊猫的家园，看软萌熊猫吃竹子、打滚玩耍。</p>
+                </div>
+            </div>
+            <!-- 卡片2 宽窄巷子 -->
+            <div class="spot-card" onclick="openModal(1)">
+                <img src="5.jpg" alt="宽窄巷子">
+                <div class="spot-info">
+                    <h3>宽窄巷子</h3>
+                    <p>老成都四合院街区，喝茶、采耳、感受川西慢生活。</p>
+                </div>
+            </div>
+            <!-- 卡片3 锦里古街 -->
+            <div class="spot-card" onclick="openModal(2)">
+                <img src="2.jpg" alt="锦里">
+                <div class="spot-info">
+                    <h3>锦里古街</h3>
+                    <p>西蜀第一街，三国风情，红灯笼夜景非常出片。</p>
+                </div>
+            </div>
+            <!-- 卡片4 武侯祠 -->
+            <div class="spot-card" onclick="openModal(3)">
+                <img src="1.jpg" alt="武侯祠">
+                <div class="spot-info">
+                    <h3>武侯祠</h3>
+                    <p>全国唯一君臣合祀庙宇，品读三国历史文化。</p>
+                </div>
+            </div>
+            <!-- 卡片5 杜甫草堂 -->
+            <div class="spot-card" onclick="openModal(4)">
+                <img src="4.jpg" alt="杜甫草堂">
+                <div class="spot-info">
+                    <h3>杜甫草堂</h3>
+                    <p>诗圣杜甫故居，浣花溪畔，诗意清幽。</p>
+                </div>
+            </div>
+            <!-- 卡片6 黄龙溪古镇 -->
+            <div class="spot-card" onclick="openModal(5)">
+                <img src="6.jpg" alt="黄龙溪">
+                <div class="spot-info">
+                    <h3>黄龙溪古镇</h3>
+                    <p>川西水乡古镇，玩水休闲，特色一根面。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 弹窗模态框 -->
+    <div class="modal" id="myModal">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+            <img class="modal-img" id="mImg" src="">
+            <div class="modal-text">
+                <h2 id="mTitle"></h2>
+                <p id="mDesc"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        成都旅游攻略网页 © 2026 版权所有
+    </footer>
+
+    <script>
+        // 景点数据
+        const spotData = [
+            {
+                img:"3.jpg",
+                title:"大熊猫繁育研究基地",
+                desc:"基地模拟熊猫野外生态环境，绿化覆盖率极高，这里生活着数十只可爱大熊猫，还有小熊猫等珍稀动物。最佳游览时间早上8-11点，大熊猫比较活跃，适合亲子游玩，门票55元左右。"
+            },
+            {
+                img:"5.jpg",
+                title:"宽窄巷子",
+                desc:"由宽巷、窄巷、井巷组成，是保存完好的清代老街区。在这里可以体验盖碗茶、川剧变脸、采耳，汇集小吃、文创、特色咖啡馆，免费开放，晚上氛围感更好。"
+            },
+            {
+                img:"2.jpg",
+                title:"锦里古街",
+                desc:"紧邻武侯祠，被誉为西蜀第一街，整条街道充满三国民俗风情，挂满红灯笼。晚上夜景绝美，小吃众多：糖油果子、三大炮、牛肉焦饼，免费游玩。"
+            },
+            {
+                img:"1.jpg",
+                title:"武侯祠",
+                desc:"纪念刘备、诸葛亮等蜀汉英雄，国内唯一君臣合祀祠庙。古柏森森，碑刻众多，喜欢三国历史一定要来，可和旁边锦里安排在一起游览。"
+            },
+            {
+                img:"4.jpg",
+                title:"杜甫草堂",
+                desc:"诗圣杜甫在成都的故居，浣花溪环绕，园林雅致，充满唐诗意境。“晓看红湿处，花重锦官城”就是在这里写下，适合安静散步、拍照。"
+            },
+            {
+                img:"6.jpg",
+                title:"黄龙溪古镇",
+                desc:"双流区的千年水乡古镇，一条溪水穿镇而过，夏天可以踩水玩水。特色美食黄龙溪一根面，距离市区稍远，适合一日短途出游。"
+            }
+        ];
+        const modal = document.getElementById("myModal");
+        const mImg = document.getElementById("mImg");
+        const mTitle = document.getElementById("mTitle");
+        const mDesc = document.getElementById("mDesc");
+
+        // 打开弹窗
+        function openModal(index){
+            let item = spotData[index];
+            mImg.src = item.img;
+            mTitle.innerText = item.title;
+            mDesc.innerText = item.desc;
+            modal.style.display = "block";
+        }
+        // 关闭弹窗
+        function closeModal(){
+            modal.style.display = "none";
+        }
+        // 点击遮罩层关闭弹窗
+        modal.onclick = function(e){
+            if(e.target == modal){
+                closeModal();
+            }
+        }
+        // 页面加载自动弹出欢迎弹窗
+        window.onload = function(){
+            setTimeout(()=>{
+                alert("欢迎来到成都旅游网页！点击景点卡片查看详情~");
+            },800)
+        }
+    </script>
+</body>
+</html>
